@@ -18,6 +18,7 @@ REPO="broadinstitute/scala"
 # build number hack
 BUILD_NUM=${BUILD_NUM:-0}
 VERSION_NUM=${VERSION_NUM:-1}
+JDK_VERSION=${JDK_VERSION:-8}
 
 # TODO
 # check that all vars are set
