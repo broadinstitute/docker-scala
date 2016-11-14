@@ -17,7 +17,7 @@
 REPO="broadinstitute/scala"
 
 # build number hack
-BUILD_NUM=${BUILD_NUM:-0}
+BUILD_NUMBER=${BUILD_NUMBER:-0}
 VERSION_NUM=${VERSION_NUM:-1}
 JDK_VERSION=${JDK_VERSION:-8}
 
@@ -36,11 +36,11 @@ sed -e "s;SCALA_VERSION_TAG;${SCALA_VERSION};" -e "s;SBT_VERSION_TAG;${SBT_VERSI
 
 # build docker
 
-docker build -t ${REPO}:${VERSION_NUM}.${BUILD_NUM} .
+docker build -t ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} .
 # need to check return status on build
 
 # rm Dockerfile after build
 # rm -f Dockerfile
 
-docker tag ${REPO}:${VERSION_NUM}.${BUILD_NUM} ${REPO}:scala-${SCALA_VERSION}
+docker tag ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} ${REPO}:scala-${SCALA_VERSION}
 
