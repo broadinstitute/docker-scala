@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # this script will construct the Dockerfile for this build based on 
 # the values for these environment vars:
 #  - JDK_VERSION
