@@ -24,16 +24,16 @@ RUN wget http://www.scala-lang.org/files/archive/scala-${SCALA_VERSION}.deb && \
 
 # install vault
 RUN curl -sf -o vault.zip  https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
- unzip vault.zip -d /usr/local/bin/ && \
- rm -f vault.zip && \
- chmod 0755 /usr/local/bin/* 
+    unzip vault.zip -d /usr/local/bin/ && \
+    rm -f vault.zip && \
+    chmod 0755 /usr/local/bin/* && \
+    rm -rf /tmp/* /var/tmp/*
 
 RUN curl -sf -o consul.zip https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
     unzip consul.zip -d /usr/local/bin/ && \
-    rm -f consul.zip
-    chmod 0755 /usr/local/bin/* 
-    rm -rf /tmp/* && \
-    rm -rf /var/tmp/*
+    rm -f consul.zip && \
+    chmod 0755 /usr/local/bin/* && \
+    rm -rf /tmp/*  /var/tmp/*
 
 # add labels for easy identification
 LABEL JAVA_VERSION=$JAVA_VERSION
