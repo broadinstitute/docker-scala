@@ -24,7 +24,7 @@ JDK_VERSION=${JDK_VERSION:-8}
 # TODO
 # check that all vars are set
 
-if [ -z "${JDK_VERSION}" -o -z "${VAULT_VERSION}" -o -z "${CONSUL_TEMPLATE_VERSION}" -o -z "${SCALA_VERSION}" -o -z "${SBT_VERSION} ]
+if [ -z "${JDK_VERSION}" -o -z "${VAULT_VERSION}" -o -z "${CONSUL_TEMPLATE_VERSION}" -o -z "${SCALA_VERSION}" -o -z "${SBT_VERSION}" ]
 then
     echo "ERROR: Must specify versions that will be part of build"
     exit 1
