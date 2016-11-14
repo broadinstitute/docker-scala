@@ -40,7 +40,7 @@ docker build -t ${REPO}:${VERSION_NUM}.${BUILD_NUM} .
 # need to check return status on build
 
 # rm Dockerfile after build
-rm -f Dockerfile
+# rm -f Dockerfile
 
 docker tag ${REPO}:${VERSION_NUM}.${BUILD_NUM} ${REPO}:scala-${SCALA_VERSION}
 
