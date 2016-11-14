@@ -36,7 +36,7 @@ sed -e "s;SCALA_VERSION_TAG;${SCALA_VERSION};" -e "s;SBT_VERSION_TAG;${SBT_VERSI
 
 # build docker
 
-docker build -t ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} .
+docker build --pull -t ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} .
 # need to check return status on build
 
 # rm Dockerfile after build
