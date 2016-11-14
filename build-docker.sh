@@ -44,3 +44,5 @@ docker build -t ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} .
 
 docker tag ${REPO}:${VERSION_NUM}.${BUILD_NUMBER} ${REPO}:scala-${SCALA_VERSION}
 
+docker push ${REPO}:${VERSION_NUM}.${BUILD_NUMBER}
+docker push ${REPO}:scala-${SCALA_VERSION}
