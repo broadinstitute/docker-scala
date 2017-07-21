@@ -1,48 +1,32 @@
 
-FROM openjdk:JDK_VERSION_TAG
+FROM openjdk:JDK_VERSION_TAG-jdk
 
 # ENV vars
-ENV VAULT_VERSION VAULT_VERSION_TAG 
-ENV CONSUL_TEMPLATE_VERSION CONSUL_TEMPLATE_VERSION_TAG 
-ENV TERM xterm-256color 
+ENV TERM xterm-256color
 ENV SCALA_VERSION SCALA_VERSION_TAG
 ENV SBT_VERSION SBT_VERSION_TAG
 
 # add additional packages and upgrade OS
 #  NOTE: in order to install newest docker - need to add diff source list
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates wget tree htop zip unzip && \
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates wget tree htop zip unzip gnupg && \
    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
    echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list && \
    apt-get update && apt-get install -y docker-engine && \
    apt-get upgrade -y && apt-get clean && \
-   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # install scala and sbt
 RUN wget http://www.scala-lang.org/files/archive/scala-${SCALA_VERSION}.deb && \
     wget http://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb && \
     dpkg -i scala-${SCALA_VERSION}.deb && \
     dpkg -i sbt-${SBT_VERSION}.deb && \
-    rm -rf /*.deb && \
-    # This next command makes SBT download all JARs necessary to run so using SBT the first time isn't so painful.
-    echo "exit" | sbt
+    rm -rf /*.deb
 
-# install vault
-RUN curl -sf -o vault.zip  https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip && \
-    unzip vault.zip -d /usr/local/bin/ && \
-    rm -f vault.zip && \
-    chmod 0755 /usr/local/bin/* && \
-    rm -rf /tmp/* /var/tmp/*
-
-RUN curl -sf -o consul.zip https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
-    unzip consul.zip -d /usr/local/bin/ && \
-    rm -f consul.zip && \
-    chmod 0755 /usr/local/bin/* && \
-    rm -rf /tmp/*  /var/tmp/*
+# Force a download of the Scala libraries.
+RUN sbt "set scalaVersion := \"$SCALA_VERSION\"" compile
 
 # add labels for easy identification
 LABEL JAVA_VERSION=$JAVA_VERSION
-LABEL VAULT_VERSION=$VAULT_VERSION
-LABEL CONSUL_VERSION=$CONSUL_VERSION
 LABEL SCALA_VERSION=$SCALA_VERSION
 LABEL SBT_VERSION=$SBT_VERSION
 
