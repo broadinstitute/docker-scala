@@ -44,7 +44,7 @@ done
 egrep "^[a-zA-Z0-9]+" "$SCALA_CONFIG" | while read scala_version rest; do
   egrep "^[a-zA-Z0-9]+" "$SBT_CONFIG" | while read sbt_version rest; do
     docker_version="scala-${scala_version}-sbt-${sbt_version}"
-    build_version="$FORCE"
+    build_version=1
 
     # Ensure Dockerfile doesn't exist
     rm -f Dockerfile
@@ -58,8 +58,6 @@ egrep "^[a-zA-Z0-9]+" "$SCALA_CONFIG" | while read scala_version rest; do
       if [ "$retcode" -eq "0" ]; then
         echo "Skipping version"
         build_version=0
-      else
-        build_version=1
       fi
     fi
 
