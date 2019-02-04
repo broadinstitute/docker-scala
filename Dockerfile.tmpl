@@ -7,25 +7,42 @@ ENV SCALA_VERSION SCALA_VERSION_TAG
 ENV SBT_VERSION SBT_VERSION_TAG
 
 # add additional packages and upgrade OS
-#  NOTE: in order to install newest docker - need to add diff source list
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates wget tree htop zip unzip gnupg && \
-   apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-   echo "deb https://apt.dockerproject.org/repo debian-jessie main" > /etc/apt/sources.list.d/docker.list && \
-   apt-get update && apt-get install -y docker-engine && \
-   apt-get upgrade -y && apt-get clean && \
+RUN apt-get update && \
+   apt-get install -y \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      gnupg2 \
+      software-properties-common \
+      wget \
+      tree \
+      htop \
+      zip \
+      unzip && \
+   curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+   test ! -z "$(apt-key fingerprint 9DC858229FC7DD38854AE2D88D81803C0EBFCD88)" && \
+   add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/debian \
+      $(lsb_release -cs) \
+      stable" && \
+   apt-get update && \
+   apt-get install -y \
+      docker-ce \
+      docker-ce-cli \
+      containerd.io && \
+   apt-get upgrade -y && \
+   apt-get clean && \
    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# install scala and sbt
-RUN wget http://www.scala-lang.org/files/archive/scala-${SCALA_VERSION}.deb && \
-    wget http://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb && \
-    dpkg -i scala-${SCALA_VERSION}.deb && \
+# Install sbt
+RUN wget http://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb && \
     dpkg -i sbt-${SBT_VERSION}.deb && \
     rm -rf /*.deb
 
 # Force a download of the Scala libraries.
 RUN sbt "set scalaVersion := \"$SCALA_VERSION\"" compile
 
-# add labels for easy identification
+# Add labels for easy identification
 LABEL JAVA_VERSION=$JAVA_VERSION
 LABEL SCALA_VERSION=$SCALA_VERSION
 LABEL SBT_VERSION=$SBT_VERSION
